@@ -93,6 +93,8 @@ button:hover {
 <h3>🐍 Snake</h3>
 <p>Klasszikus kígyós játék</p>
 <button onclick="openGame('snake')">Play</button>
+<button onclick="restartSnake()">🔁 Újraindítás</button>
+<p id="snakeMsg"></p>
 </div>
 
 <div class="card">
@@ -235,6 +237,8 @@ function checkMath(){
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+let game;
+let isGameOver = false;
 let box = 15;
 let snake = [{x:5*box, y:5*box}];
 let food = {
@@ -287,13 +291,15 @@ function draw(){
 
     // game over
     if(
-        headX < 0 || headY < 0 ||
-        headX >= 300 || headY >= 300 ||
-        collision(newHead, snake)
-    ){
-        clearInterval(game);
-        alert("💀 Game Over!");
-    }
+    headX < 0 || headY < 0 ||
+    headX >= 300 || headY >= 300 ||
+    collision(newHead, snake))
+{
+    clearInterval(game);
+    isGameOver = true;
+    document.getElementById("snakeMsg").innerText = "💀 Game Over! Nyomj újraindítást!";
+    return;
+}
 
     snake.unshift(newHead);
 }
@@ -308,6 +314,23 @@ function collision(head, array){
 }
 
 let game = setInterval(draw, 120);
+
+function restartSnake(){
+
+    snake = [{x:5*box, y:5*box}];
+    direction = "RIGHT";
+    isGameOver = false;
+
+    food = {
+        x: Math.floor(Math.random()*20)*box,
+        y: Math.floor(Math.random()*20)*box
+    };
+
+    document.getElementById("snakeMsg").innerText = "";
+
+    clearInterval(game);
+    game = setInterval(draw, 120);
+}
 </script>
 
 </body>
