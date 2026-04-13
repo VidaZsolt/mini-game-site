@@ -293,8 +293,8 @@ function draw(){
     if(
     headX < 0 || headY < 0 ||
     headX >= 300 || headY >= 300 ||
-    collision(newHead, snake))
-{
+    collision(newHead, snake)
+){
     clearInterval(game);
     isGameOver = true;
     document.getElementById("snakeMsg").innerText = "💀 Game Over! Nyomj újraindítást!";
