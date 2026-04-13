@@ -6,118 +6,205 @@
 
 <style>
 body {
+    margin: 0;
     font-family: Arial;
-    text-align: center;
-    background: #111;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     color: white;
 }
 
-button {
-    padding: 10px 15px;
-    margin: 5px;
-    cursor: pointer;
+/* HEADER */
+header {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.3);
 }
 
+/* MENU */
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+}
+
+.menu button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #38bdf8;
+    color: black;
+    font-weight: bold;
+}
+
+.menu button:hover {
+    background: #0ea5e9;
+}
+
+/* GAME AREA */
 .game {
     display: none;
-    margin-top: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.08);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
 }
 
 .active {
     display: block;
 }
 
-.box {
-    font-size: 30px;
-    margin-top: 20px;
+/* CARDS */
+.card {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+/* BUTTON */
+button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* INPUT */
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
 }
 </style>
 </head>
 
 <body>
 
+<header>
 <h1>🎮 Mini Game Hub</h1>
+<p>Modern játék platform (saját projekted 🚀)</p>
+</header>
 
 <!-- MENÜ -->
-<button onclick="showGame('menu')">🏠 Menü</button>
-<button onclick="showGame('guess')">🎯 Guess Game</button>
-<button onclick="showGame('click')">👆 Click Game</button>
-<button onclick="showGame('rps')">✊ Rock Paper Scissors</button>
-
-<hr>
-
-<!-- MENÜ -->
-<div id="menu" class="game active">
-    <h2>Válassz játékot 👆</h2>
+<div class="menu">
+<button onclick="show('home')">🏠 Főoldal</button>
+<button onclick="show('guess')">🎯 Guess</button>
+<button onclick="show('click')">👆 Click</button>
+<button onclick="show('rps')">✊ RPS</button>
+<button onclick="show('math')">➗ Math</button>
 </div>
 
-<!-- GUESS GAME -->
+<!-- HOME -->
+<div id="home" class="game active">
+<div class="card">
+<h2>Üdv 👋</h2>
+<p>Válassz egy játékot a menüből!</p>
+</div>
+</div>
+
+<!-- GUESS -->
 <div id="guess" class="game">
-    <h2>🎯 Guess the Number (1-10)</h2>
-    <input id="guessInput" type="number">
-    <button onclick="checkGuess()">Tippelés</button>
-    <p id="guessResult"></p>
+<h2>🎯 Guess a szám (1-10)</h2>
+<input id="guessInput" type="number">
+<button onclick="guess()">Tipp</button>
+<p id="guessResult"></p>
 </div>
 
-<!-- CLICK GAME -->
+<!-- CLICK -->
 <div id="click" class="game">
-    <h2>👆 Click Game</h2>
-    <button onclick="addScore()">Kattints!</button>
-    <div class="box">Pont: <span id="score">0</span></div>
+<h2>👆 Click Game</h2>
+<p>Pont: <span id="score">0</span></p>
+<button onclick="add()">Kattints!</button>
 </div>
 
 <!-- RPS -->
 <div id="rps" class="game">
-    <h2>✊ Rock Paper Scissors</h2>
-    <button onclick="rps('rock')">✊ Kő</button>
-    <button onclick="rps('paper')">✋ Papír</button>
-    <button onclick="rps('scissors')">✌️ Olló</button>
-    <p id="rpsResult"></p>
+<h2>✊ Kő-Papír-Olló</h2>
+<button onclick="rps('rock')">✊</button>
+<button onclick="rps('paper')">✋</button>
+<button onclick="rps('scissors')">✌️</button>
+<p id="rpsResult"></p>
+</div>
+
+<!-- MATH GAME -->
+<div id="math" class="game">
+<h2>➗ Matek játék</h2>
+<p id="mathQ"></p>
+<input id="mathA" type="number">
+<button onclick="checkMath()">Ellenőrzés</button>
+<p id="mathResult"></p>
 </div>
 
 <script>
-let score = 0;
-let randomNumber = Math.floor(Math.random() * 10) + 1;
 
-function showGame(id) {
-    document.querySelectorAll('.game').forEach(g => g.classList.remove('active'));
+let score = 0;
+let random = Math.floor(Math.random()*10)+1;
+
+function show(id){
+    document.querySelectorAll('.game').forEach(g=>g.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
 
-// GUESS GAME
-function checkGuess() {
-    let guess = document.getElementById("guessInput").value;
-    if (guess == randomNumber) {
+/* GUESS */
+function guess(){
+    let val = document.getElementById("guessInput").value;
+    if(val == random){
         document.getElementById("guessResult").innerText = "🎉 Talált!";
-        randomNumber = Math.floor(Math.random() * 10) + 1;
+        random = Math.floor(Math.random()*10)+1;
     } else {
-        document.getElementById("guessResult").innerText = "❌ Nem jó, próbáld újra!";
+        document.getElementById("guessResult").innerText = "❌ nem jó";
     }
 }
 
-// CLICK GAME
-function addScore() {
+/* CLICK */
+function add(){
     score++;
     document.getElementById("score").innerText = score;
 }
 
-// RPS
-function rps(player) {
-    let choices = ["rock", "paper", "scissors"];
-    let cpu = choices[Math.floor(Math.random() * 3)];
+/* RPS */
+function rps(p){
+    let arr = ["rock","paper","scissors"];
+    let cpu = arr[Math.floor(Math.random()*3)];
 
-    if (player === cpu) {
-        document.getElementById("rpsResult").innerText = "Döntetlen 🤝";
-    } else if (
-        (player === "rock" && cpu === "scissors") ||
-        (player === "paper" && cpu === "rock") ||
-        (player === "scissors" && cpu === "paper")
-    ) {
-        document.getElementById("rpsResult").innerText = "Nyertél 🎉 CPU: " + cpu;
+    if(p===cpu){
+        document.getElementById("rpsResult").innerText="Döntetlen 🤝";
+    } else if(
+        (p==="rock"&&cpu==="scissors")||
+        (p==="paper"&&cpu==="rock")||
+        (p==="scissors"&&cpu==="paper")
+    ){
+        document.getElementById("rpsResult").innerText="Nyertél 🎉 CPU:"+cpu;
     } else {
-        document.getElementById("rpsResult").innerText = "Vesztettél 😅 CPU: " + cpu;
+        document.getElementById("rpsResult").innerText="Vesztettél 😅 CPU:"+cpu;
     }
 }
+
+/* MATH GAME */
+let a = 0;
+let b = 0;
+
+function newMath(){
+    a = Math.floor(Math.random()*10);
+    b = Math.floor(Math.random()*10);
+    document.getElementById("mathQ").innerText = `${a} + ${b} = ?`;
+}
+newMath();
+
+function checkMath(){
+    let ans = document.getElementById("mathA").value;
+    if(ans == a+b){
+        document.getElementById("mathResult").innerText = "✔️ helyes!";
+    } else {
+        document.getElementById("mathResult").innerText = "❌ nem jó";
+    }
+    newMath();
+}
+
 </script>
 
 </body>
