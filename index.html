@@ -237,7 +237,6 @@ function checkMath(){
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let game;
 let isGameOver = false;
 let box = 15;
 let snake = [{x:5*box, y:5*box}];
@@ -313,8 +312,6 @@ function collision(head, array){
     return false;
 }
 
-let game = setInterval(draw, 120);
-
 function restartSnake(){
 
     snake = [{x:5*box, y:5*box}];
@@ -328,9 +325,16 @@ function restartSnake(){
 
     document.getElementById("snakeMsg").innerText = "";
 
-    clearInterval(game);
+    if(gameStarted){
+        clearInterval(game);
+    }
+
     game = setInterval(draw, 120);
+    gameStarted = true;
 }
+    let gameStarted = false;
+
+    restartSnake();
 </script>
 
 </body>
