@@ -153,6 +153,13 @@ button:hover {
 <p id="mathResult"></p>
 </div>
 
+/* Snake */
+<div id="snake" class="game">
+<h2>🐍 Snake Game</h2>
+<canvas id="gameCanvas" width="300" height="300" style="background:#000;border-radius:10px;"></canvas>
+<p>Használd a nyilakat (⬅️⬆️⬇️➡️)</p>
+</div>
+
 <script>
 
 let score = 0;
@@ -224,13 +231,6 @@ function checkMath(){
     }
     newMath();
 }
-
-/* Snake */
-<div id="snake" class="game">
-<h2>🐍 Snake Game</h2>
-<canvas id="gameCanvas" width="300" height="300" style="background:#000;border-radius:10px;"></canvas>
-<p>Használd a nyilakat (⬅️⬆️⬇️➡️)</p>
-</div>
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
