@@ -2,13 +2,13 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>Mini Game Hub</title>
+<title>Game Store</title>
 
 <style>
 body {
     margin: 0;
     font-family: Arial;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
+    background: #0b1220;
     color: white;
 }
 
@@ -16,39 +16,50 @@ body {
 header {
     text-align: center;
     padding: 20px;
-    background: rgba(0,0,0,0.3);
+    background: #111a2e;
 }
 
-/* MENU */
-.menu {
-    display: flex;
-    justify-content: center;
+/* GRID */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 15px;
-    padding: 15px;
+    padding: 20px;
 }
 
-.menu button {
-    padding: 10px 15px;
+/* CARD */
+.card {
+    background: #1b2a4a;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background: #243a66;
+}
+
+/* BUTTON */
+button {
+    padding: 10px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     background: #38bdf8;
-    color: black;
     font-weight: bold;
+    margin-top: 10px;
 }
 
-.menu button:hover {
+button:hover {
     background: #0ea5e9;
 }
 
-/* GAME AREA */
+/* GAME SCREEN */
 .game {
     display: none;
-    max-width: 600px;
-    margin: 20px auto;
-    background: rgba(255,255,255,0.08);
     padding: 20px;
-    border-radius: 15px;
     text-align: center;
 }
 
@@ -56,28 +67,8 @@ header {
     display: block;
 }
 
-/* CARDS */
-.card {
-    background: rgba(255,255,255,0.1);
-    padding: 15px;
-    margin: 10px;
-    border-radius: 10px;
-}
-
-/* BUTTON */
-button {
-    padding: 10px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-/* INPUT */
-input {
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
+.back {
+    background: #ef4444;
 }
 </style>
 </head>
@@ -85,30 +76,47 @@ input {
 <body>
 
 <header>
-<h1>🎮 Mini Game Hub</h1>
-<p>Modern játék platform (saját projekted 🚀)</p>
+<h1>🎮 Game Store</h1>
+<p>Válassz egy játékot és induljon 🚀</p>
 </header>
 
-<!-- MENÜ -->
-<div class="menu">
-<button onclick="show('home')">🏠 Főoldal</button>
-<button onclick="show('guess')">🎯 Guess</button>
-<button onclick="show('click')">👆 Click</button>
-<button onclick="show('rps')">✊ RPS</button>
-<button onclick="show('math')">➗ Math</button>
+<!-- STORE -->
+<div id="store" class="container">
+
+<div class="card">
+<h3>🎯 Guess Game</h3>
+<p>Találd ki a számot!</p>
+<button onclick="openGame('guess')">Play</button>
 </div>
 
-<!-- HOME -->
-<div id="home" class="game active">
 <div class="card">
-<h2>Üdv 👋</h2>
-<p>Válassz egy játékot a menüből!</p>
+<h3>👆 Click Game</h3>
+<p>Kattints minél többet!</p>
+<button onclick="openGame('click')">Play</button>
 </div>
+
+<div class="card">
+<h3>✊ RPS</h3>
+<p>Kő-Papír-Olló</p>
+<button onclick="openGame('rps')">Play</button>
+</div>
+
+<div class="card">
+<h3>➗ Math Game</h3>
+<p>Gyors matek feladatok</p>
+<button onclick="openGame('math')">Play</button>
+</div>
+
+</div>
+
+<!-- BACK BUTTON -->
+<div style="text-align:center;">
+<button class="back" onclick="back()">⬅ Vissza a Store-ba</button>
 </div>
 
 <!-- GUESS -->
 <div id="guess" class="game">
-<h2>🎯 Guess a szám (1-10)</h2>
+<h2>🎯 Guess Game</h2>
 <input id="guessInput" type="number">
 <button onclick="guess()">Tipp</button>
 <p id="guessResult"></p>
@@ -130,12 +138,12 @@ input {
 <p id="rpsResult"></p>
 </div>
 
-<!-- MATH GAME -->
+<!-- MATH -->
 <div id="math" class="game">
-<h2>➗ Matek játék</h2>
+<h2>➗ Math Game</h2>
 <p id="mathQ"></p>
 <input id="mathA" type="number">
-<button onclick="checkMath()">Ellenőrzés</button>
+<button onclick="checkMath()">Check</button>
 <p id="mathResult"></p>
 </div>
 
@@ -144,9 +152,16 @@ input {
 let score = 0;
 let random = Math.floor(Math.random()*10)+1;
 
-function show(id){
-    document.querySelectorAll('.game').forEach(g=>g.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+/* NAVIGATION */
+function openGame(id){
+    document.getElementById("store").style.display = "none";
+    document.querySelectorAll(".game").forEach(g=>g.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+function back(){
+    document.getElementById("store").style.display = "grid";
+    document.querySelectorAll(".game").forEach(g=>g.classList.remove("active"));
 }
 
 /* GUESS */
@@ -184,23 +199,22 @@ function rps(p){
     }
 }
 
-/* MATH GAME */
-let a = 0;
-let b = 0;
+/* MATH */
+let a=0,b=0;
 
 function newMath(){
-    a = Math.floor(Math.random()*10);
-    b = Math.floor(Math.random()*10);
+    a=Math.floor(Math.random()*10);
+    b=Math.floor(Math.random()*10);
     document.getElementById("mathQ").innerText = `${a} + ${b} = ?`;
 }
 newMath();
 
 function checkMath(){
-    let ans = document.getElementById("mathA").value;
-    if(ans == a+b){
-        document.getElementById("mathResult").innerText = "✔️ helyes!";
+    let ans=document.getElementById("mathA").value;
+    if(ans==a+b){
+        document.getElementById("mathResult").innerText="✔️ helyes!";
     } else {
-        document.getElementById("mathResult").innerText = "❌ nem jó";
+        document.getElementById("mathResult").innerText="❌ nem jó";
     }
     newMath();
 }
